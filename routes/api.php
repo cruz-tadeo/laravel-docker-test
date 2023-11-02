@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExampleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::controller( \App\Http\Controllers\ExampleController::class)->group(function () {
+//Route::get('/', \App\Http\Controllers\ExampleController::class, [''] );
+Route::controller(App\Http\Controllers\ExampleController::class)->group(function () {
     Route::get('/', 'index');
 });
