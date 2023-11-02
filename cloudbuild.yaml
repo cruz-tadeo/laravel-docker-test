@@ -1,0 +1,23 @@
+ 
+  steps:
+  # Build the container image
+  - name: 'docker'
+    args: ['build', '-t', 'docker.io/${_DOCKER_USERNAME}/laravel-test', '.']
+
+  # Log in to Docker Hub using the secrets
+  - name: 'docker'
+    args: ['login', '--username', '${_DOCKER_USERNAME}', '--password', '${_DOCKER_PASSWORD}']
+
+  # Push the container image to Docker Hub
+  - name: 'docker'
+    args: ['push', 'docker.io/${_DOCKER_USERNAME}/laravel-test']
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', 'gcp-test-laravel', '--image', 'docker.io/${_DOCKER_USERNAME}/laravel-test', '--region', 'us-west1', '--platform', 'managed', '--port', '8080']
+  
+  logsBucket: 'gs://lomas-test_cloudbuild'
+  
+  images:
+  - ${_DOCKER_USERNAME}/laravel-test:latest
